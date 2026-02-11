@@ -1,3 +1,7 @@
+#Personal ignores
+/slask.txt
+
+#Standard laravel-ignores
 /.phpunit.cache
 /bootstrap/ssr
 /node_modules
