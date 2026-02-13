@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,15 +10,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Category::all;
     }
 
     /**
@@ -27,38 +18,51 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "name"        => "required|string|max:64",
+            "description" => "filled|string|max:128",
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(category $cat)
     {
-        //
-    }
+        $id       = $cat->$id;
+        $foundCat = Category::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return $foundCat;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, category $cat)
     {
-        //
+        $request->validate([
+            "name"        => "required|string|max:64",
+            "description" => "filled|string|max:128",
+        ]);
+
+        $id       = $cat->$id;
+        $foundCat = Category::find($id);
+        $foundCat->update($request->all());
+
+        return $foundCat;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(category $cat)
     {
-        //
+        $id       = $cat->$id;
+        $foundCat = Category::find($id);
+        $foundCat->delete();
+
+        return response()->json([
+            "Kategorin har raderats.",
+        ]);
     }
 }
