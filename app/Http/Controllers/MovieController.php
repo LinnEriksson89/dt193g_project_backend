@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,15 +10,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Movie::all();
     }
 
     /**
@@ -27,38 +18,57 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "title"       => "required|string|max:128",
+            "year"        => "gt:1800|max:4",
+            "description" => "filled|string|max:512",
+            "price"       => "numeric:strict|decimal:0,2",
+            "amount"      => "integer|numeric:strict|max:3|gte:0",
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(movie $movie)
     {
-        //
-    }
+        $id         = $movie->id;
+        $foundMovie = Movie::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return $foundMovie;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, movie $movie)
     {
-        //
+        $request->validate([
+            "title"       => "required|string|max:128",
+            "year"        => "gt:1800|max:4",
+            "description" => "filled|string|max:512",
+            "price"       => "numeric:strict|decimal:0,2",
+            "amount"      => "integer|numeric:strict|max:3|gte:0",
+        ]);
+
+        $id         = $movie->id;
+        $foundMovie = Movie::find($id);
+        $foundMovie->update($request->all());
+
+        return $foundMovie;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(movie $movie)
     {
-        //
+        $id         = $movie->id;
+        $foundMovie = Movie::find($id);
+        $foundMovie->delete();
+
+        return response()->json([
+            "Filmen har raderats.",
+        ]);
     }
 }
