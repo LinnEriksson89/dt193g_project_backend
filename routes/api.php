@@ -18,7 +18,7 @@ Route::apiResource('category', CategoryController::class)->missing(function (Req
         404);
 });
 
-Route::apiResource('connection', CategoryConnectionController::class)->missing(function (Request $request) {
+Route::apiResource('/connection', CategoryConnectionController::class)->missing(function (Request $request) {
     return response()->json([
         "Ingen koppling hittades."],
         404);
