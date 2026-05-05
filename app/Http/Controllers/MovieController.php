@@ -26,6 +26,8 @@ class MovieController extends Controller
             "price"       => "numeric:strict|decimal:0,2",
             "amount"      => "integer|numeric:strict|max:3|gte:0",
         ]);
+
+        return Movie::create($request->all());
     }
 
     /**
@@ -71,5 +73,33 @@ class MovieController extends Controller
         return response()->json([
             "Filmen har raderats.",
         ]);
+    }
+
+    //Function to update the amount of products in storage
+    public function updateAmount(Request $request, movie $movie) {
+
+        $newAmount = $request->amount;
+
+        if($newAmount < 0 || $newAmount > 999) {
+            return response()->json(["Systemet tillåter bara antal mellan 0 och 999."], 422);
+        }
+
+        $id = $movie->id;
+
+        Movie::where("id", $id)->update(["amount" => $newAmount]);
+
+        $updatedMovie = Movie::find($id);
+
+        return $updatedMovie;
+    }
+
+    
+    //Function to get the most recently added movie.
+    public function newMovie(Request $request) {
+        $lastMovie = Movie::latest()->first();
+
+        $id = $lastMovie->id;
+
+        return $id;
     }
 }

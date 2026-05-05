@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\Http",
+    "\\app\\Http\\Controllers",
+    "\\app\\Http\\Controllers\\Settings",
+    "\\app\\Models",
+    "\\bootstrap",
+    "\\config",
+    "\\database",
+    "\\database\\migrations",
+    "\\routes"
+  ],
+  "SelectedNode": "\\app\\Models\\Category.php",
+  "PreviewInSolutionExplorer": false
+}

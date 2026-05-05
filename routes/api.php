@@ -9,32 +9,41 @@ use Illuminate\Support\Facades\Route;
 
 //Api-resources
 
-Route::apiResource('/movie', MovieController::class)->missing(function (Request $request) {
+Route::apiResource('movie', MovieController::class)->missing(function (Request $request) {
     return response()->json([
         "Filmen hittades inte."],
         404);
-})->middleware('auth:sanctum');
+});
+//->middleware('auth:sanctum');
 
-Route::apiResource('/category', CategoryController::class)->missing(function (Request $request) {
+Route::apiResource('category', CategoryController::class)->missing(function (Request $request) {
     return response()->json([
         "Kategorin hittades inte."],
         404);
-})->middleware('auth:sanctum');
+}); //->middleware('auth:sanctum');
 
-Route::apiResource('/connection', CategoryConnectionController::class)->missing(function (Request $request) {
+Route::apiResource('connection', CategoryConnectionController::class)->missing(function (Request $request) {
     return response()->json([
         "Ingen koppling hittades."],
         404);
-})->middleware('auth:sanctum');
+}); //->middleware('auth:sanctum');
 
+//Get movies in categories
+Route::get('connection/movie/{movieid}', [CategoryConnectionController::class, 'getMoviesInCategories']);
+
+//Update amount of a movie
+Route::post('updateamount/{movie}', [MovieController::class, 'updateAmount']);
+
+//Get most recent movie
+Route::get('/newmovie/', [MovieController::class, 'newMovie']);
 
 //Related to accounts
-Route::get('/user', function (Request $request) {
+Route::get('user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+});//->middleware('auth:sanctum');
 
-Route::post('/register', [AuthController::class, "register"])->middleware('guest');
+Route::post('register', [AuthController::class, "register"])->middleware('guest');
 
-Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::post('login', [AuthController::class, 'login'])->middleware('guest');
 
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

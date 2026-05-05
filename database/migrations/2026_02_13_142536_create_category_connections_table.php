@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Category;
+use App\Models\Movie;
 
 return new class extends Migration
 {
@@ -13,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('category_connections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('movieId')->constrained();
-            $table->foreignId('categoryId')->constrained();
+            $table->foreignIdFor(Movie::class, "movieid")->constrained();
+            $table->foreignIdFor(Category::class, "categoryid")->constrained();
             $table->timestamps();
         });
     }

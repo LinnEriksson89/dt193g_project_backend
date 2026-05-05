@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CategoryConnection;
+use App\Models\Movie;
 
 class CategoryConnectionController extends Controller
 {
@@ -23,6 +24,8 @@ class CategoryConnectionController extends Controller
             "categoryid" => "required",
             "movieid"    => "required",
         ]);
+        
+        return CategoryConnection::create($request->all());
     }
 
     /**
@@ -66,4 +69,19 @@ class CategoryConnectionController extends Controller
             "Filmen har tagits bort ur kategorin.",
         ]);
     }
+
+    /*Get all categorys a movie is connected to*/
+    public function getMoviesInCategories ($movieId) {
+        
+        $result = CategoryConnection::where('movieid', $movieId)->get();
+
+        if(!$result -> isEmpty()) {
+            return $result;
+        } else {
+            return response()->json([
+                "Filmen verkar inte tillhöra några kategorier."
+            ], 404);
+        }
+    }
+
 }

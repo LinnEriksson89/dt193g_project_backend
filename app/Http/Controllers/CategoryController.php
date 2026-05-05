@@ -20,17 +20,19 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "name"        => "required|string|max:64",
-            "description" => "filled|string|max:128",
+            "categoryname"        => "required|string|max:64",
+            "categorydescription" => "filled|string|max:128",
         ]);
+
+        return Category::create($request->all());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(category $cat)
+    public function show(category $category)
     {
-        $id       = $cat->$id;
+        $id      = $category->id;
         $foundCat = Category::find($id);
 
         return $foundCat;
@@ -39,14 +41,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, category $cat)
+    public function update(Request $request, category $category)
     {
         $request->validate([
-            "name"        => "required|string|max:64",
-            "description" => "filled|string|max:128",
+            "categoryname"        => "required|string|max:64",
+            "categorydescription" => "filled|string|max:128",
         ]);
 
-        $id       = $cat->$id;
+        $id       = $category->id;
         $foundCat = Category::find($id);
         $foundCat->update($request->all());
 
@@ -56,9 +58,9 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(category $cat)
+    public function destroy(category $category)
     {
-        $id       = $cat->$id;
+        $id       = $category->id;
         $foundCat = Category::find($id);
         $foundCat->delete();
 
