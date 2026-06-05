@@ -2,7 +2,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -18,16 +21,18 @@ class AuthController extends Controller
 
         //Create user
         $user = User::create([
-            "name"     => $validated["name"],
-            "email"    => $validated["email"],
-            "password" => Hash::make($validated["password"]),
+            "name"     => $request->name,
+            "email"    => $request->email,
+            "password" => Hash::make($request->password),
         ]);
 
-        //Log in user
-        Auth::login($user);
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         //Return response and code 201 (created)
-        return response("Användaren har skapats.", 201);
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
     //Log in user
@@ -42,15 +47,15 @@ class AuthController extends Controller
         //Attempt log in
         if (Auth::attempt($credentials, $request->boolean("remember"))) {
 
-            //Regenerate session
-            $request->session()->regenerate();
-
             //Set token
             $user = User::where("email", $request->email)->first();
 
-            $user->createToken('APITOKEN')->plainTextToken;
+            $token = $user->createToken("token")->plainTextToken;
 
-            return redirect()->intended("/start");
+             return response()->json([
+                 "login" => "Inloggningen lyckades.",
+                 "token" => $token
+        ]);
         }
 
         return back()->withErrors(["login" => "Inloggningen misslyckades."]);
@@ -60,13 +65,10 @@ class AuthController extends Controller
     //Log out user
     public function logout(Request $request)
     {
-        Auth::logout();
-
-        //Invalidate session and clear token
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        //Clear access token
         $request->user()->currentAccessToken()->delete();
 
-        return redirect("/")->with("Du har blivit utloggad.");
+        return response()->json([
+        "message" => "Du har blivit utloggad."]);
     }
 }
