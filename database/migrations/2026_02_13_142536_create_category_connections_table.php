@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('category_connections', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Movie::class, "movieid")->constrained();
-            $table->foreignIdFor(Category::class, "categoryid")->constrained();
+            $table->foreignIdFor(Movie::class, "movieid")->constrained()->onDelete("cascade");
+            $table->foreignIdFor(Category::class, "categoryid")->constrained()->onDelete("cascade");
             $table->timestamps();
         });
     }
