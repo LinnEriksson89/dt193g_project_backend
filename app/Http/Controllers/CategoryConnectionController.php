@@ -71,7 +71,7 @@ class CategoryConnectionController extends Controller
     }
 
     /*Get all categorys a movie is connected to*/
-    public function getMoviesInCategories ($movieId) {
+    public function getMoviesInCategories($movieId) {
         
         $result = CategoryConnection::where('movieid', $movieId)->get();
 
@@ -80,7 +80,7 @@ class CategoryConnectionController extends Controller
         } else {
             return response()->json([
                 "Filmen verkar inte tillhöra några kategorier."
-            ], 404);
+            ], 422);
         }
     }
 
